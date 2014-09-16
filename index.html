@@ -1,0 +1,358 @@
+<html>
+	<head>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="assets/controllers/controller.js"></script>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				background: rgb( 30, 30, 30 );
+				font-size: 14px;
+				color: #fff;
+				font-family: Verdana;
+			}
+			a, a:visited, p {
+				color: #fff;
+				text-decoration: none;
+			}
+			#logo { cursor: pointer }
+			#current, #nev { margin-top: 20px }
+			#new { display: none }
+			header {
+				height: 163px;
+				background: rgb( 211, 177, 20 );
+				border-bottom: 20px solid rgb( 116, 87, 12 );
+			}
+			header img {
+				display: block;
+				margin: 0 auto;
+				padding-top: 7px;
+			}
+			nav, nav ul, nav ul li, nav ul li a, nav ul li a:hover { 
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 50px;
+			}
+			nav ul {
+				padding: 0;
+				width: 100%;
+				list-style: none;
+				position: relative;
+				display: inline-table;
+			}
+			nav ul li, nav ul li a {
+				float: left;
+				display: block;
+				width: 33%;
+				line-height: 50px;
+				text-align: center;
+				font-weight: bold;
+				font-size: 18px;
+				background: rgb( 211, 177, 20 );
+				cursor: pointer;
+			}
+			nav ul li.middle { width: 34% }
+			nav ul li a { width: 100% }
+			nav ul li a:hover { background: rgb( 116, 87, 12 ) }
+			#content {
+				margin-bottom: 30px;
+				background: rgb( 30, 30, 30 );
+			}
+			.intro-text {
+				text-align: center;
+				font-size: 24px;
+				color: rgb( 180, 180, 180 );
+			}
+			.overview-title {
+				margin: 0;
+				padding: 10px 0;
+				text-align: center;
+				font-size: 20px;
+				border-bottom: 2px solid rgb( 80, 80, 80 );
+			}
+			.overview {
+				height: 100px;
+				border-bottom: 2px solid rgb( 80, 80, 80 );
+				cursor: pointer;
+			}
+			.overview:hover { background: rgb( 116, 87, 12 ) }
+			.overview img {
+				display: block;
+				float: left;
+				margin: 5px 0 0 10px;
+				width: auto;
+				height: 90px;
+			}
+			.overview .name {
+				float: left;
+				margin: 0 0 0 10px;
+				padding: 0;
+				line-height: 100px;
+				font-size: 24px;
+				font-weight: bold;
+				color: rgb( 180, 180, 180 );
+			}
+			.overview .level {
+				float: right;
+				margin: 0 10px 0 0;
+				padding: 0;
+				line-height: 100px;
+				font-size: 40px;
+				color: rgb( 180, 180, 180 );
+			}
+			.character-form p {
+				margin: 0;
+				padding: 10px 0;
+				text-align: center;
+				font-size: 24px;
+				color: rgb( 180, 180, 180 );
+			}
+			.character-form input[ type="text" ] {
+				margin-left: 20%;
+				padding: 0 10px;
+				width: 60%;
+				height: 40px;
+				font-size: 20px;
+				font-style: italic;
+				color: rgb( 180, 180, 180 );
+				background: rgb( 80, 80, 80 );
+				border: 2px solid rgb( 120, 120, 120 );
+			}
+			.character-form input[ type="text" ]:focus, .character-form input[ type="submit" ]:hover {
+				background: rgb( 100, 100, 100 );
+				border: 2px solid rgb( 140, 140, 140 );
+			}
+			.character-form input[ type="submit" ] {
+				margin: 10px 0 0 40%;
+				width: 20%;
+				height: 40px;
+				font-size: 20px;
+				color: rgb( 180, 180, 180 );
+				background: rgb( 80, 80, 80 );
+				border: 2px solid rgb( 120, 120, 120 );
+				cursor: pointer;
+			}
+			.character-nav, .gang-nav { border-bottom: 2px solid rgb( 80, 80, 80 ); border-top: 2px solid rgb( 80, 80, 80 ) }
+			.character-nav, .character-nav ul, .character-nav ul li, .gang-nav, .gang-nav ul, .gang-nav ul li { height: 40px }
+			.character-nav ul li, .gang-nav ul li {
+				width: 50%;
+				float: left;
+				margin: 0 auto;
+				margin: 0;
+				text-align: center;
+				line-height: 40px;
+				font-size: 24px;
+				font-weight: bold;
+				cursor: pointer;
+			}
+			.character-nav ul li:first-child, .gang-nav ul li:first-child, .gang-nav ul li:last-child { background: rgb( 30, 30, 30 ) }
+			.character-nav ul li:first-child:hover, .gang-nav ul li:first-child:hover, .gang-nav ul li:last-child:hover { background: rgb( 116, 87, 12 ) }
+			.gang-nav ul li {
+				width: 33%;
+				font-size: 20px;
+			}
+			.gang-nav ul li.even { width: 34% }
+			.even { background: rgb( 50, 50, 50 ) }
+			.char-name {
+				margin: 0;
+				padding: 10px 0;
+				text-align: center;
+				font-size: 24px;
+				font-weight: bold;
+			}
+			.char-info {
+				padding: 15px 0 0 0;
+				background: rgb( 60, 60, 60 );
+				border-bottom: 2px solid rgb( 80, 80, 80 );
+				border-top: 2px solid rgb( 80, 80, 80 );
+			}
+			.char-info p {
+				margin: 0;
+				padding: 5px 20px;
+			}
+			.char-gang-btn {
+				margin-top: 15px;
+				height: 50px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 16px;
+				font-weight: bold;
+				border-top: 2px solid rgb( 80, 80, 80 );
+				cursor: pointer;
+			}
+			.char-gang-btn:hover { background: rgb( 116, 87, 12 ) }
+			.xp-bar {
+				margin-left: 5%;
+				width: 90%;
+				height: 30px;
+				line-height: 30px;
+				background: rgb( 30, 30, 30 );
+				border: 2px solid rgb( 80, 80, 80 );
+			}
+			.bar-inside {
+				height: 30px;
+				background: rgb( 211, 177, 20 );
+			}
+			.xp-text { text-align: center }
+			.char-cheevs { display: none }
+			.cheev:first-child { border-top: 2px solid rgb( 80, 80, 80 ); }
+			.cheev {
+				height: 110px;
+				border-bottom: 2px solid rgb( 80, 80, 80 );
+			}
+			.cheev p {
+				margin: 0;
+				padding: 5px 0 0 10px;
+			}
+			.cheev .cheev-name {
+				font-size: 18px;
+				font-weight: bold;
+			}
+			.cheev .cheev-desc {
+				margin-left: 20px;
+				font-style: italic;
+			}
+			.cheev-bar {
+				margin: 5px 0 0 5%;
+				width: 90%;
+				height: 20px;
+				background: rgb( 30, 30, 30 );
+				border: 2px solid rgb( 80, 80, 80 );
+			}
+			.cheev-bar section { height: 20px; background: rgb( 211, 177, 20 ) }
+			.cheev-text { text-align: center }
+			.gang-name, .gang-level {
+				margin: 0;
+				padding: 0;
+				text-align: center;
+			}
+			.gang-name {
+				padding-top: 5px;
+				font-size: 24px;
+				font-weight: bold;
+			}
+			.gang-level { font-size: 18px }
+			.gang-info, .gang-members, .gang-upgrades, .member-plate, .upgrade-plate {
+				border-top: 2px solid rgb( 80, 80, 80 );
+				border-bottom: 2px solid rgb( 80, 80, 80 );
+			}
+			.gang-members, .gang-upgrades { display: none }
+			.gang-info { margin-top: 5px; background: rgb( 60, 60, 60 ) }
+			.gang-info p {
+				margin: 0;
+				padding: 5px 0 0 15px;
+			}
+			.gang-info p:last-child { padding-bottom: 5px }
+			.gang-members p {
+				margin: 0;
+				padding: 0;
+			}
+			.member-plate {
+				height: 40px;
+				border-top: 0;
+				cursor: pointer;
+			}
+			.member-plate:hover { background: rgb( 116, 87, 12 ) }
+			.member-plate p {
+				float: left;
+				padding: 0 10px;
+				line-height: 40px;
+				font-size: 20px;
+			}
+			.member-plate p:last-child { float: right }
+			.member-plate:last-child { border-bottom: 0; }
+			.upgrade-plate {
+				position: relative;
+				height: 60px;
+				border-top: 0;
+			}
+			.upgrade-plate:last-child { border-bottom: 0; }
+			.upgrade-plate p {
+				position: absolute;
+				margin: 0;
+				padding: 5px 10px;
+			}
+			.upgrade-desc { top: 30px }
+			.upgrade-plate p:first-child { padding-bottom: 0; font-size: 20px }
+			.upgrade-plate p:last-child { position: absolute; right: 10px; top: 0; padding: 0; line-height: 60px; }
+			.server-plate { height: 110px; border-top: 2px solid rgb( 80, 80, 80 ); }
+			.server-plate:last-child { border-bottom: 2px solid rgb( 80, 80, 80 ); }
+			.server-plate p {
+				margin: 0;
+				padding:  5px 0 0 10px;
+			}
+			.server-plate p:first-child { font-size: 20px }
+			.server-plate p:last-child { text-align: center }
+			.server-bar {
+				margin: 5px 0 0 5%;
+				width: 90%;
+				height: 20px;
+				background: rgb( 30, 30, 30 );
+				border: 2px solid rgb( 80, 80, 80 );
+			}
+			.server-bar section { height: 20px; background: rgb( 211, 177, 20 ) }
+			footer {
+				position: fixed;
+				bottom: 0;
+				width: 100%;
+				z-index: -1;
+			}
+			.active { background: rgb( 116, 87, 12 ) }
+			footer p {
+				text-align: center;
+				font-size: 10px;
+			}
+			#return {
+				display: none;
+				height: 50px;
+				border-bottom: 2px solid rgb( 100, 100, 100 );
+				cursor: pointer;
+			}
+			#return #rtrn-btn {
+				float: left;
+				width: 50px;
+				height: 50px;
+				text-align: center;
+				line-height: 50px;
+				font-size: 18px;
+				font-weight: bold;
+				color: rgb( 100, 100, 100 );
+				border-right: 2px solid rgb( 100, 100, 100 );
+			}
+			#return p {
+				margin: 0 0 0 60px;
+				padding: 0;
+				line-height: 50px;
+				color: rgb( 120, 120, 120 );
+				font-size: 18px;
+			}
+		</style>
+	</head>
+	<body>
+		<header><a href="#"><img id="logo" src="assets/img/logo.png" /></a></header>
+		<nav>
+			<ul>
+				<li><a href="#char" id="char-btn">Character</a></li>
+				<li class="middle"><a href="#gang" id="gang-btn">Gang</a></li>
+				<li><a href="#svr" id="svr-btn">Servers</a></li>
+			</ul>
+		</nav>
+		<aside id="return">
+			<section id="rtrn-btn"><</section>
+			<p>Return to</p>
+		</aside>
+		<section id="content">
+			<section id="current">
+				<section class="intro-text">
+					<p>Welcome to GangWars Companion!</p>
+					<br />
+					<p>Click a navigation button to begin</p>
+				</section>
+			</section>
+		</section>
+		<footer><p>Copyright &copy; Alluminous Designs 2014 | All Rights Reserved</p></footer>
+	</body>
+</html>
